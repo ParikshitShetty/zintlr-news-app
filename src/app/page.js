@@ -26,7 +26,7 @@ export default function Home() {
     async function fetchArticles() {
       setLoading(true);
       fetch(endpoints.news_api).then((res) => res.json()).then((resJson) => {
-        console.log("res",resJson)
+        // console.log("res",resJson)
         if (resJson.status === "ok" && resJson.articles.length > 0){
           dispatch(concatArticles(resJson.articles));
         }

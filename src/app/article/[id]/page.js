@@ -42,7 +42,7 @@ export default function Article({ params }) {
   useEffect(() => {
     if (openTabs.length > 0) {
         const articleData = articles.find(art => art.title === [...openTabs].pop());
-        console.log("articleData",articleData)
+        // console.log("articleData",articleData)
         setArticle(articleData);
         if (openTabs.length === 1) {
           emptiedRef.current = true;
