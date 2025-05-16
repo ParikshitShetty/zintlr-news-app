@@ -75,9 +75,6 @@ export default function Home() {
         <meta property="og:type" content="website" />
       </Head>
       <div className="min-h-screen w-screen p-6">
-        <h1 className="text-3xl font-bold text-center mb-6">
-          Trending news from an open-source API
-        </h1>
         <div className="max-w-xl mx-auto mb-8">
           <input
             type="text"
@@ -87,12 +84,15 @@ export default function Home() {
             className="w-full px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
+        <h1 className="text-3xl font-bold text-center mb-6">
+          Trending news from an open-source API
+        </h1>
       { loading ? 
         <Loader text="Fetching articles..." />
       : (
       <>
         <div className="space-y-6 max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {filteredArticles.map((article,index) => (
+          {filteredArticles?.map((article,index) => (
             <Card
               key={index}
               id={index}

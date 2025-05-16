@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Socials from './Socials';
 
 /**
  * A reusable card component that displays an image, title, and description using Tailwind CSS.
@@ -41,6 +42,7 @@ export default function Card({ imageSrc, a_link, imageAlt, title, description, i
         onClick={handleIconClick}
         className='absolute top-2 right-2 text-gray-400 hover:text-white transition focus:outline-none cursor-pointer'
       />
+      <Socials title={title} url={a_link} />
     </div>
   );
 }
