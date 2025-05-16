@@ -4,6 +4,7 @@ import Head from "next/head";
 import { useSelector, useDispatch } from "react-redux";
 import { openTab, closeTab } from "../features/tabs/tabsSlice";
 import Card from "@/components/Card";
+import { useEffect, useState } from "react";
 
 let cardsData = [
     {
@@ -92,6 +93,19 @@ export default function Home() {
   const closedTabs = useSelector(state => state.tabs.closed);
 
   const dispatch = useDispatch();
+
+  const [articles, setArticles] = useState([]);
+
+  useEffect(() => {
+    // Fetch from open-source API, then map to include slug
+    async function fetchArticles() {
+      const res = await fetch('/api/articles');
+      const data = await res.json();
+      // data should include an array of articles with { id, slug, title, description, imageUrl }
+      setArticles(data);
+    }
+    // fetchArticles();
+  }, []);
 
   console.log("Uooooo",openTabs,closedTabs)
   return (
