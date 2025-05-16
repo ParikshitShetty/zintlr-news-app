@@ -7,6 +7,9 @@ import { concatArticles } from '@/store/slices/articleSlice'
 import Card from "@/components/Card";
 import { endpoints } from "@/constants/api";
 import Loader from "@/utils/Loader";
+import Pagination from "@/components/Pagination";
+
+const articlesPerPage = 4;
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -15,6 +18,9 @@ export default function Home() {
   const [loading,setLoading] = useState(false);
   const [searchTerm,setSearchTerm] = useState('');
   const [filteredArticles,setFilteredArticles] = useState([]);
+
+  const currentPage =  useSelector(state => state.articles.currentPage);
+  // const [currentPage,setCurrentPage] = useState(1)
 
   useEffect(() => {
     async function fetchArticles() {
@@ -36,18 +42,23 @@ export default function Home() {
 
   useEffect(() => {
     if (articles.length === 0) return;
+
+    let filtered = []
     if (searchTerm.length === 0) {
-      setFilteredArticles(articles);
-      return;
-    };
+      // setFilteredArticles(articles);
+      const lastPostIndex = currentPage * articlesPerPage;
+      const firstPostIndex = lastPostIndex - articlesPerPage;
+      filtered = articles.slice(firstPostIndex,lastPostIndex)
+    } else {
+      filtered = articles.filter(({ title }) =>
+        (title).toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
 
-    const filtered = articles.filter(({ title }) =>
-      (title).toLowerCase().includes(searchTerm.toLowerCase())
-    );
     setFilteredArticles(filtered);
-  },[searchTerm,articles]);
+  },[searchTerm, articles, currentPage]);
 
-  console.log("Uooooo",articles)
+  console.log("Uooooo",currentPage)
   return (
     <>
       <Head>
@@ -77,8 +88,9 @@ export default function Home() {
           />
         </div>
       { loading ? 
-        <Loader />
-      :
+        <Loader text="Fetching articles..." />
+      : (
+      <>
         <div className="space-y-6 max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
           {filteredArticles.map((article,index) => (
             <Card
@@ -92,6 +104,20 @@ export default function Home() {
             />
           ))}
         </div>
+        {searchTerm.length === 0 ? (
+          <Pagination
+            totalArticles={articles.length}
+            articlesPerPage={articlesPerPage}
+            currentPage={currentPage}
+            clicked={currentPage > 1}
+            totalFilteredArticles={articles.length}
+          />
+        ) : (
+          <div className="w-full h-full text-center">
+            Sorry. Couldn't find what you are looking for.
+          </div>
+        )}
+      </>)
       }
       </div>
     </>

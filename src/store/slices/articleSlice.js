@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  articles : []
+  articles : [],
+  currentPage : 1,
 };
 
 const articlesSlice = createSlice({
@@ -16,10 +17,20 @@ const articlesSlice = createSlice({
     },
     clearArticles(state, action) {
         state.articles = [];
+    },
+    nextPage(state, action){
+        state.currentPage += 1
+    },
+    prevPage(state, action){
+        state.currentPage -= 1
+    },
+    pageReset(state, action){
+        state.currentPage = 1
     }
   }
 });
 
 
-export const { addArticle, clearArticles, concatArticles } = articlesSlice.actions;
+export const { addArticle, clearArticles, concatArticles, nextPage, 
+    prevPage, pageReset } = articlesSlice.actions;
 export default articlesSlice.reducer;
