@@ -12,7 +12,7 @@ export default function Article({ params }) {
     console.log("params",id)
     return (
         <>
-            <div className='text-yellow-400 min-h-screen w-full'>
+            <div className='text-yellow-400 min-h-screen w-screen'>
                 Heyo { id }
             </div>
         </>
