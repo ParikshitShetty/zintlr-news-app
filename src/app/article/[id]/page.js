@@ -1,6 +1,6 @@
 "use client";
 
-import React, { use, useState, useEffect } from 'react'
+import React, { use, useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import Head from 'next/head';
@@ -22,6 +22,8 @@ export default function Article({ params }) {
     const [article, setArticle] = useState(null);
     const [menuOpen, setMenuOpen] = useState(false);
 
+    const emptiedRef = useRef(false);
+
     const handleCardClick = () => {
         router.push(`/article/${id}`);
     };
@@ -29,14 +31,29 @@ export default function Article({ params }) {
   // load article data (mock or API)
   useEffect(() => {
     if (!id) return;
-    
-    const articleObj = articles[id];
+    const articleObj = articles.find(art => art.title === decodeURI(id));
     setArticle(articleObj);
     // mark this tab as open
     if (articleObj?.title) {
         dispatch(openTab(articleObj.title));
     }
   }, [id, dispatch]);
+
+  useEffect(() => {
+    if (openTabs.length > 0) {
+        const articleData = articles.find(art => art.title === [...openTabs].pop());
+        console.log("articleData",articleData)
+        setArticle(articleData);
+        if (openTabs.length === 1) {
+          emptiedRef.current = true;
+        } else if (emptiedRef.current) {
+          emptiedRef.current = false;
+        }
+    } else if (emptiedRef.current) {
+        const last = openTabs.filter(s => s !== id).pop();
+        router.push(last ? `/article/${last}` : '/');
+    }
+  },[openTabs])
 
   const handleCloseTab = (tabSlug) => {
     dispatch(closeTab(tabSlug));
@@ -80,7 +97,6 @@ export default function Article({ params }) {
             />
             <ArticleClosedTabs 
                 handleCardClick={handleCardClick}
-
             />
           </div>
         )}

@@ -12,7 +12,7 @@ export default function Card({ imageSrc, a_link, imageAlt, title, description, i
   const router = useRouter();
 
   const handleCardClick = () => {
-    router.push(`/article/${id}`);
+    router.push(`/article/${title}`);
   };
   
   const handleIconClick = (e) => {
