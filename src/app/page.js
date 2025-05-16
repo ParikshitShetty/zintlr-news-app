@@ -1,10 +1,10 @@
 "use client";
 
 import Head from "next/head";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { openTab, closeTab } from "../features/tabs/tabsSlice";
+import { concatArticles } from '@/store/slices/articleSlice'
 import Card from "@/components/Card";
-import { useEffect, useState } from "react";
 
 let cardsData = [
     {
@@ -89,12 +89,8 @@ let cardsData = [
 cardsData = JSON.parse(JSON.stringify(cardsData));
 
 export default function Home() {
-  const openTabs = useSelector(state => state.tabs.open);
-  const closedTabs = useSelector(state => state.tabs.closed);
-
   const dispatch = useDispatch();
-
-  const [articles, setArticles] = useState([]);
+  const articles = useSelector(state => state.articles.articles);
 
   useEffect(() => {
     // Fetch from open-source API, then map to include slug
@@ -102,12 +98,13 @@ export default function Home() {
       const res = await fetch('/api/articles');
       const data = await res.json();
       // data should include an array of articles with { id, slug, title, description, imageUrl }
-      setArticles(data);
+      // setArticles(data);
     }
     // fetchArticles();
+    dispatch(concatArticles(cardsData))
   }, []);
 
-  console.log("Uooooo",openTabs,closedTabs)
+  console.log("Uooooo",articles)
   return (
     <>
       <Head>
@@ -137,7 +134,7 @@ export default function Home() {
           />
         </div>
         <div className="space-y-6 max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {cardsData.map((article,index) => (
+          {articles.map((article,index) => (
             <Card
               key={index}
               id={index}
