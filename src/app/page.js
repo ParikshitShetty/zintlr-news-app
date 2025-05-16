@@ -58,7 +58,7 @@ export default function Home() {
     setFilteredArticles(filtered);
   },[searchTerm, articles, currentPage]);
 
-  console.log("Uooooo",currentPage)
+  // console.log("Uooooo",currentPage)
   return (
     <>
       <Head>

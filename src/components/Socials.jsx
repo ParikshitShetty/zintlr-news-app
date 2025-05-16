@@ -27,6 +27,7 @@ export default function Socials({ url, title}) {
             {
                 links.map((link,index) => (
                     <button
+                        key={index}
                         className="text-blue-500 hover:text-blue-700 cursor-pointer"
                         title="Share on Twitter"
                         onClick={(e) => handleIconClick(e,link.link)}

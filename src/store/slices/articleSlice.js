@@ -1,7 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const load = key => {
+  if (typeof window === "undefined") return [];
+  try { return JSON.parse(localStorage.getItem(key)) || []; }
+  catch { return []; }
+};
+
 const initialState = {
-  articles : [],
+  articles : load('article'),
   currentPage : 1,
 };
 
@@ -13,7 +19,13 @@ const articlesSlice = createSlice({
         state.articles.push(action.payload);
     },
     concatArticles(state, action){
-        state.articles.push(...action.payload);
+        const newArticles = action.payload;
+        newArticles.forEach(article => {
+          if (!state.articles.some(a => a.title === article.title)) {
+            state.articles.push(article);
+          };
+        });
+        localStorage.setItem("article", JSON.stringify(state.articles));
     },
     clearArticles(state, action) {
         state.articles = [];
